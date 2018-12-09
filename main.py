@@ -15,13 +15,11 @@
 # limitations under the License.
 #
 import webapp2
-from controllers.helloWorld import HelloWorldHandler
-from controllers import init_jinja_render
+from controllers.helloWorldHandler import HelloWorldHandler
 from core.database import connect_to_cloudsql
 
 if __name__ == "main":
     db = connect_to_cloudsql()
-    jinja_render_environment = init_jinja_render()
     app = webapp2.WSGIApplication([
         ('/', HelloWorldHandler)
     ], debug=True)
