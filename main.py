@@ -15,21 +15,13 @@
 # limitations under the License.
 #
 import webapp2
-import jinja2
-
-
-JINJA_ENVIRONMENT = jinja2.Environment(
-    loader=jinja2.FileSystemLoader("./templates"),
-    extensions=['jinja2.ext.autoescape'],
-    autoescape=True)
-
-
-class MainHandler(webapp2.RequestHandler):
-    def get(self):
-        self.response.write('Hello world!')
-
+from controllers.helloWorld import HelloWorldHandler
+from controllers import init_jinja_render
+from core.database import connect_to_cloudsql
 
 if __name__ == "main":
+    db = connect_to_cloudsql()
+    jinja_render_environment = init_jinja_render()
     app = webapp2.WSGIApplication([
-        ('/', MainHandler)
+        ('/', HelloWorldHandler)
     ], debug=True)
