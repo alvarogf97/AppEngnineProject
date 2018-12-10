@@ -1,14 +1,13 @@
-from main import db
+from google.appengine.ext import db
+from pvtranslator.models.module import Module
 
 
 class Campaign(db.Model):
-    __tablename__ = 'campaign'
-    __namespace__ = 'pvtranslator'
 
-    id = db.Column('id', db.Integer, primary_key=True)
-    name = db.Column('name', db.String(32), unique=True, nullable=False)
-    date = db.Column('date', db.Date, nullable=False)
-    module_id = db.Column(db.Integer, db.ForeignKey('module.id'))
+    id = db.IntegerProperty
+    name = db.StringProperty
+    date = db.DateProperty()
+    module_id = db.ReferenceProperty(Module, collection_name='campaigns')
 
     def __repr__(self):
         return "<Campaign(name='" + str(self.name) + "', date='" + str(self.date) + "')>"

@@ -1,12 +1,12 @@
-from main import db
+from google.appengine.ext import db
+from pvtranslator.models.user import User
 
 
 class Module(db.Model):
-    __tablename__ = 'module'
-    id = db.Column('id', db.Integer, primary_key=True)
-    name = db.Column('name', db.String(32), unique=True, nullable=False)
-    campaigns = db.relationship("Campaign", backref="module", lazy=True)
-    user_id = db.Column(db.String(21), db.ForeignKey('user.id'))
+    id = db.IntegerProperty
+    name = db.StringProperty
+    user_id = db.ReferenceProperty(User, collection_name='modules')
 
     def __repr__(self):
         return "Module(name='%s')" % self.name
+

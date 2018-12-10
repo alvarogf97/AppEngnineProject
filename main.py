@@ -14,14 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from pvtranslator.models import get_entities_import
+import jinja2
 from pvtranslator.views import app
-from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy(app)
+if __name__ == "__main__":
+    app.jinja_environment = jinja2.Environment(
+        loader=jinja2.FileSystemLoader("./pvtranslator/templates"),
+        extensions=['jinja2.ext.autoescape'],
+        autoescape=True)
 
 
-if __name__ == "main":
-    get_entities_import()
-    db.create_all()
-    # google cloud run flask app
