@@ -19,6 +19,8 @@ libraries:
   version: latest
 - name: MySQLdb
   version: "latest"
+- name: ssl
+  version: latest
 
 env_variables:
     CLOUDSQL_CONNECTION_NAME: ingenieria-web-a1-2018-224611:europe-west1:iweb

@@ -14,12 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import webapp2
-from controllers.helloWorldHandler import HelloWorldHandler
-from core.database import connect_to_cloudsql
+from pvtranslator.models import get_entities_import
+from pvtranslator.views import app
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy(app)
+
 
 if __name__ == "main":
-    db = connect_to_cloudsql()
-    app = webapp2.WSGIApplication([
-        ('/', HelloWorldHandler)
-    ], debug=True)
+    get_entities_import()
+    db.create_all()
+    # google cloud run flask app
