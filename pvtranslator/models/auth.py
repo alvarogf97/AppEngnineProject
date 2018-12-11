@@ -1,7 +1,9 @@
-from urllib2 import Request, urlopen, URLError
-from flask import redirect, url_for, session
-from flask_oauth import OAuth
+import json
 
+from urllib2 import Request, urlopen, URLError
+from flask import session
+from flask_oauth import OAuth
+from pvtranslator.models.user import User
 
 GOOGLE_CLIENT_ID = '827082594735-u8qer289a8oelkr1h02cuc1tcpmv93ic.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET = 'UAMh_YXZhCKqwp1HNiw2Rh8L'
@@ -22,9 +24,9 @@ google = oauth.remote_app('google',
 def get_user():
     access_token = session.get('access_token')
     if access_token is None:
-        return redirect(url_for('login'))
-    access_token = access_token[0]
+        return None
 
+    access_token = access_token[0]
     headers = {'Authorization': 'OAuth ' + access_token}
     req = Request('https://www.googleapis.com/oauth2/v1/userinfo',
                   None, headers)
@@ -34,6 +36,16 @@ def get_user():
         if e.code == 401:
             # Unauthorized - bad token
             session.pop('access_token', None)
-            return redirect(url_for('login'))
-        return res.read()
-    return res.read()
+            return None
+        return None
+    request_result = json.loads(res.read())
+    user_id = request_result['id']
+    user_email = request_result['email']
+    user_name = request_result['name']
+    users = User.search_by_id(user_id)
+    if len(users)>0:
+        result_user = users[0]
+    else:
+        result_user = User(id=user_id, email=user_email, name=user_name)
+        result_user.put()
+    return result_user
