@@ -1,5 +1,4 @@
 import json
-
 from urllib2 import Request, urlopen, URLError
 from flask import session
 from flask_oauth import OAuth

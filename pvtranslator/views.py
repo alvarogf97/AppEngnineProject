@@ -21,6 +21,12 @@ def login():
     return google.authorize(callback=callback)
 
 
+@app.route('/logout')
+def logout():
+    session.pop('access_token', None)
+    return redirect(url_for('index'))
+
+
 @app.route('/oauth2callback')
 @google.authorized_handler
 def authorized(resp):
