@@ -8,7 +8,11 @@ app.secret_key = 'development'
 
 @app.route('/')
 def index():
-    return render_template("index.html",msg=get_user())
+    user = get_user()
+    if user:
+        return render_template("index.html",msg=user)
+    else:
+        return render_template("index.html", msg="I dont know who are you!")
 
 
 @app.route('/login')
