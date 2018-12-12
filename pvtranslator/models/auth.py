@@ -40,7 +40,7 @@ def get_user():
     request_result = json.loads(res.read())
     user_id = request_result['id']
     user_email = request_result['email']
-    user_name = request_result['name']
+    user_name = request_result.get('name')
     users = User.search_by_id(user_id)
     if len(users)>0:
         result_user = users[0]
