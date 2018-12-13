@@ -1,8 +1,8 @@
 import json
-from urllib2 import Request, urlopen, URLError
+from urllib2 import Request, urlopen, HTTPError
 from flask import session
 from flask_oauth import OAuth
-from pvtranslator.models.user import User
+from pvtranslator.models.entities.user import User
 
 GOOGLE_CLIENT_ID = '827082594735-u8qer289a8oelkr1h02cuc1tcpmv93ic.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET = 'UAMh_YXZhCKqwp1HNiw2Rh8L'
@@ -31,7 +31,7 @@ def get_user():
                   None, headers)
     try:
         res = urlopen(req)
-    except URLError, e:
+    except HTTPError, e:
         if e.code == 401:
             # Unauthorized - bad token
             session.pop('access_token', None)
@@ -41,10 +41,4 @@ def get_user():
     user_id = request_result['id']
     user_email = request_result['email']
     user_name = request_result.get('name')
-    users = User.search_by_id(user_id)
-    if len(users)>0:
-        result_user = users[0]
-    else:
-        result_user = User(id=user_id, email=user_email, name=user_name)
-        result_user.put()
-    return result_user
+    return User.create_user(_id=user_id, email=user_email, name=user_name)

@@ -1,5 +1,5 @@
 from google.appengine.ext import db
-from pvtranslator.models.user import User
+from pvtranslator.models.entities.user import User
 
 
 class Module(db.Model):

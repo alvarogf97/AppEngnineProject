@@ -1,10 +1,16 @@
-import warnings
+import logging
 import zipfile
 from datetime import datetime
 from os import listdir
 from os.path import isfile, join
 
 temporary_dir = '/temp'
+allowed_file_extension = {'zip'}
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in allowed_file_extension
 
 
 def parse_xls(filepath):
@@ -44,12 +50,13 @@ def parse_xls(filepath):
                 _buffer = _file.readline()
             done = True
     except Exception as e:
-        warnings.warn(str(e))
+        logging.error(str(e))
 
     return done, campaign_name, campaign_date, curve_hour, curve_v_values, curve_i_values, curve_p_values
 
 
 def parse_zip(file_path):
+
     z_files = zipfile.ZipFile(file_path)
     z_files.extractall(temporary_dir)
     files = [f for f in listdir(temporary_dir) if isfile(join(temporary_dir, f))]
