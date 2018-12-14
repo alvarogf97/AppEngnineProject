@@ -2,6 +2,7 @@ import logging
 import zipfile
 from datetime import datetime
 from pvtranslator.models.entities.campaign import Campaign
+from pvtranslator.models.entities.curve import Curve
 from pvtranslator.models.entities.module import Module
 
 
@@ -79,7 +80,10 @@ def parse_zip(zip_file_storage, module_key):
         if done:
             if not campaign:
                 campaign = Campaign.create_campaign(name=campaign_name, date=campaign_date, module=module)
-            # TODO create curve
+
+            Curve.create_curve(hour=curve_hour, v_values=curve_v_values,
+                               i_values=curve_i_values, p_values=curve_p_values, campaign=campaign)
+
         else:
             errors.append(error_msg)
             result_code = 2
