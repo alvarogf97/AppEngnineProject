@@ -1,19 +1,17 @@
 import logging
 import zipfile
 from datetime import datetime
-from os import listdir
-from os.path import isfile, join
-
-temporary_dir = '/temp'
-allowed_file_extension = {'zip'}
+from pvtranslator.models.entities.campaign import Campaign
+from pvtranslator.models.entities.module import Module
 
 
 def allowed_file(filename):
+    allowed_file_extension = {'zip'}
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in allowed_file_extension
 
 
-def parse_xls(filepath):
+def parse_xls(_file):
 
     done = False
     campaign_name = None
@@ -25,47 +23,56 @@ def parse_xls(filepath):
     line_number = 0
 
     try:
-        with open(filepath, "r") as _file:
-            curve_v_values = []
-            curve_i_values = []
-            curve_p_values = []
+        curve_v_values = []
+        curve_i_values = []
+        curve_p_values = []
+        _buffer = _file.readline()
+        while _buffer:
+            if line_number == 1:
+                buffer_split = _buffer.split(':')
+                campaign_name = buffer_split[1].replace('\t', '').replace('\n', '')
+            if line_number == 2:
+                buffer_split = _buffer.split(':')
+                campaign_date = buffer_split[1].replace('\t', '').replace('\n', '')
+                campaign_date = datetime.strptime(campaign_date, '%d/%m/%Y').date()
+            if line_number == 3:
+                buffer_split = _buffer.split(':')
+                curve_hour = (":".join(buffer_split[1:])).replace('\t', '').replace('\n', '')
+            if line_number > 35:
+                buffer_split = _buffer.replace(',', '.').split()
+                curve_v_values.append(float(buffer_split[1]))
+                curve_i_values.append(float(buffer_split[2]))
+                curve_p_values.append(float(buffer_split[3]))
+            line_number += 1
             _buffer = _file.readline()
-            while _buffer:
-                if line_number == 1:
-                    buffer_split = _buffer.split(':')
-                    campaign_name = buffer_split[1].replace('\t', '').replace('\n', '')
-                if line_number == 2:
-                    buffer_split = _buffer.split(':')
-                    campaign_date = buffer_split[1].replace('\t', '').replace('\n', '')
-                    campaign_date = datetime.strptime(campaign_date, '%d/%m/%Y').date()
-                if line_number == 3:
-                    buffer_split = _buffer.split(':')
-                    curve_hour = (":".join(buffer_split[1:])).replace('\t', '').replace('\n', '')
-                if line_number > 35:
-                    buffer_split = _buffer.replace(',', '.').split()
-                    curve_v_values.append(float(buffer_split[1]))
-                    curve_i_values.append(float(buffer_split[2]))
-                    curve_p_values.append(float(buffer_split[3]))
-                line_number += 1
-                _buffer = _file.readline()
-            done = True
+        done = True
     except Exception as e:
         logging.error(str(e))
 
     return done, campaign_name, campaign_date, curve_hour, curve_v_values, curve_i_values, curve_p_values
 
 
-def parse_zip(file_path):
+def parse_zip(zip_file_storage, module_key):
 
-    z_files = zipfile.ZipFile(file_path)
-    z_files.extractall(temporary_dir)
-    files = [f for f in listdir(temporary_dir) if isfile(join(temporary_dir, f))]
+    module = Module.get_by_key_name(key_names=module_key)
+    logging.info(module.name)
 
-    for _file in files:
+    if not allowed_file(zip_file_storage.filename):
+        return False
+
+    z_files = zipfile.ZipFile(zip_file_storage.stream, 'r')
+
+    for file_name in z_files.namelist():
+        _file = z_files.open(file_name, 'rU')
 
         done, campaign_name, campaign_date, curve_hour, curve_v_values, \
-            curve_i_values, curve_p_values = parse_xls(temporary_dir+"/"+_file)
+            curve_i_values, curve_p_values = parse_xls(_file)
+        _file.close()
 
         if done:
-            # create elements
-            pass
+            logging.info(campaign_name)
+            campaign = Campaign.create_campaign(name=campaign_name, date=campaign_date, module=module)
+            # TODO create curve
+
+    z_files.close()
+    return True

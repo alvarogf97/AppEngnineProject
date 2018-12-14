@@ -6,7 +6,6 @@ from pvtranslator.models.utils import auth
 
 
 class Campaign(db.Model):
-
     name = db.StringProperty()
     date = db.DateProperty()
     module = db.ReferenceProperty(Module, collection_name='campaigns')
@@ -20,8 +19,12 @@ class Campaign(db.Model):
 
     @staticmethod
     def create_campaign(name, date, module):
-        return Campaign.get_or_insert(key_name=name+"_"+module.name,
-                                      name=name, date=date, module=module, user=get_user())
+        user = auth.get_user()
+        if user:
+            return Campaign.get_or_insert(key_name=name + "_" + module.name,
+                                          name=name, date=date, module=module, user=get_user())
+        else:
+            return None
 
     @staticmethod
     def delete_campaign(campaign):
