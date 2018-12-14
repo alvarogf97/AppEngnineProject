@@ -14,6 +14,7 @@ def allowed_file(filename):
 def parse_xls(_file):
 
     done = False
+    error_msg = ''
     campaign_name = None
     campaign_date = None
     curve_hour = None
@@ -47,32 +48,41 @@ def parse_xls(_file):
             _buffer = _file.readline()
         done = True
     except Exception as e:
-        logging.error(str(e))
+        error_msg = str(e)
 
-    return done, campaign_name, campaign_date, curve_hour, curve_v_values, curve_i_values, curve_p_values
+    return done, error_msg, campaign_name, campaign_date, curve_hour, curve_v_values, curve_i_values, curve_p_values
 
 
+# return (code, errors):
+#   code == 0 -> not complete
+#   code == 1 -> complete
+#   code == 2 -> complete with errors
 def parse_zip(zip_file_storage, module_key):
 
+    result_code = 1
+    errors = []
     module = Module.get_by_key_name(key_names=module_key)
-    logging.info(module.name)
+    campaign = None
 
     if not allowed_file(zip_file_storage.filename):
-        return False
+        return 0, ['file must be zip']
 
     z_files = zipfile.ZipFile(zip_file_storage.stream, 'r')
 
     for file_name in z_files.namelist():
         _file = z_files.open(file_name, 'rU')
 
-        done, campaign_name, campaign_date, curve_hour, curve_v_values, \
+        done, error_msg, campaign_name, campaign_date, curve_hour, curve_v_values, \
             curve_i_values, curve_p_values = parse_xls(_file)
         _file.close()
 
         if done:
-            logging.info(campaign_name)
-            campaign = Campaign.create_campaign(name=campaign_name, date=campaign_date, module=module)
+            if not campaign:
+                campaign = Campaign.create_campaign(name=campaign_name, date=campaign_date, module=module)
             # TODO create curve
+        else:
+            errors.append(error_msg)
+            result_code = 2
 
     z_files.close()
-    return True
+    return result_code, errors

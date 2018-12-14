@@ -16,6 +16,18 @@ def index():
         return render_template("index.html", msg="I dont know who are you!")
 
 
+@app.route('/upload_campaign', methods=['POST'])
+def upload_campaign():
+    uploaded_file = request.files.get('file_campaigns')
+    module_key = request.form.get('module_key')
+    code, errors = parse_zip(uploaded_file, module_key)
+    return render_template('index.html', msg=code, errors=errors)
+
+
+############################################
+#              login functions             #
+############################################
+
 @app.route('/login')
 def login():
     callback = url_for('authorized', _external=True)
@@ -40,10 +52,6 @@ def authorized(resp):
 def get_access_token():
     return session.get('access_token')
 
-
-@app.route('/upload_campaign', methods=['POST'])
-def upload_campaign():
-    uploaded_file = request.files.get('file_campaigns')
-    module_key = request.form.get('module_key')
-    msg = parse_zip(uploaded_file, module_key)
-    return render_template('index.html', msg=msg)
+############################################
+#             /login functions             #
+############################################
