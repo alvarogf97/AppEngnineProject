@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="{{ url_for('upload_campaign')}}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="module_key" value={{ module_key }}>
+        <input type="file" name="file_campaigns" >
+        <input type="submit">
+    </form>
+</body>
+</html>

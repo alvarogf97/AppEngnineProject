@@ -5,6 +5,9 @@
     <title>HelloWorld</title>
 </head>
 <body>
-    {{msg}}
+    <p>{{msg}}</p>
+    {% for error in errors %}
+        <p>{{error}}</p>
+    {% endfor %}
 </body>
 </html>
