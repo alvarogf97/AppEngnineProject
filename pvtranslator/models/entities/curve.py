@@ -1,6 +1,5 @@
 from google.appengine.ext import db
 from pvtranslator.models.entities.campaign import Campaign
-from pvtranslator.models.utils import auth
 
 
 class Curve(db.Model):
@@ -11,7 +10,8 @@ class Curve(db.Model):
     campaign = db.ReferenceProperty(Campaign, collection_name='curves')
 
     def has_permits(self):
-        user = auth.get_user()
+        from pvtranslator.models.utils.auth import get_user
+        user = get_user()
         if user is not None and self.campaign.user.id == user.id or self.campaign.module.user_id.id == user.id:
             return True
         return False

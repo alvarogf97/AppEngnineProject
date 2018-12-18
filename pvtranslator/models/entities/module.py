@@ -1,6 +1,5 @@
 from google.appengine.ext import db
 from pvtranslator.models.entities.user import User
-from pvtranslator.models.utils.auth import get_user
 
 
 class Module(db.Model):
@@ -8,6 +7,7 @@ class Module(db.Model):
     user = db.ReferenceProperty(User, collection_name='modules')
 
     def has_permits(self):
+        from pvtranslator.models.utils.auth import get_user
         user = get_user()
         if user is not None and self.user.id == user.id:
             return True

@@ -3,7 +3,6 @@ from pvtranslator.models.entities.campaign import Campaign
 from pvtranslator.models.entities.curve import Curve
 from pvtranslator.models.entities.module import Module
 from pvtranslator.models.entities.user import User
-from pvtranslator.models.utils.auth import get_user
 
 
 def create_user(_id, email, name):
@@ -12,6 +11,7 @@ def create_user(_id, email, name):
 
 
 def create_module(name):
+    from pvtranslator.models.utils.auth import get_user
     user = get_user()
     if user:
         return Module.get_or_insert(key_name=name, name=name, user=user)
@@ -30,6 +30,7 @@ def edit_module(module):
 
 
 def create_campaign(name, date, module):
+    from pvtranslator.models.utils.auth import get_user
     user = get_user()
     if user:
         return Campaign.get_or_insert(key_name=name + "_" + module.name,

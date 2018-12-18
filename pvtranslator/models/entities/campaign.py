@@ -1,8 +1,6 @@
 from google.appengine.ext import db
-from pvtranslator.models.utils.auth import get_user
 from pvtranslator.models.entities.module import Module
 from pvtranslator.models.entities.user import User
-from pvtranslator.models.utils import auth
 
 
 class Campaign(db.Model):
@@ -12,7 +10,8 @@ class Campaign(db.Model):
     user = db.ReferenceProperty(User)
 
     def has_permits(self):
-        user = auth.get_user()
+        from pvtranslator.models.utils.auth import get_user
+        user = get_user()
         if user is not None and self.user.id == user.id or self.module.user_id.id == user.id:
             return True
         return False
