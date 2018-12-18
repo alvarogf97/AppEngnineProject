@@ -24,11 +24,13 @@ class Module(db.Model):
 
     @staticmethod
     def delete_module(module):
-        db.delete(module)
+        if module.has_permits:
+            db.delete(module)
 
     @staticmethod
     def edit_module(module):
-        module.put()
+        if module.has_permits:
+            module.put()
 
     def __repr__(self):
         return "Module(name='%s')" % self.name

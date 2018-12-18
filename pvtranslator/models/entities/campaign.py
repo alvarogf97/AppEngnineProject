@@ -28,11 +28,13 @@ class Campaign(db.Model):
 
     @staticmethod
     def delete_campaign(campaign):
-        db.delete(campaign)
+        if campaign.has_permits:
+            db.delete(campaign)
 
     @staticmethod
     def edit_campaign(campaign):
-        campaign.put()
+        if campaign.has_permits:
+            campaign.put()
 
     def __repr__(self):
         return "<Campaign(name='" + str(self.name) + "', date='" + str(self.date) + "')>"

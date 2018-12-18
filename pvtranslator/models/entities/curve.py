@@ -23,11 +23,13 @@ class Curve(db.Model):
 
     @staticmethod
     def delete_curve(curve):
-        db.delete(curve)
+        if curve.campaign.has_permits():
+            db.delete(curve)
 
     @staticmethod
     def edit_curve(curve):
-        curve.put()
+        if curve.campaign.has_permits():
+            curve.put()
 
     def __repr__(self):
         return "<Curve(hour='" + str(self.hour) + "', campaign='" + str(self.campaign) + "', module='" + \
