@@ -14,23 +14,5 @@ class Module(db.Model):
         else:
             return False
 
-    @staticmethod
-    def create_module(name):
-        user = get_user()
-        if user:
-            return Module.get_or_insert(key_name=name, name=name, user=user)
-        else:
-            return None
-
-    @staticmethod
-    def delete_module(module):
-        if module.has_permits:
-            db.delete(module)
-
-    @staticmethod
-    def edit_module(module):
-        if module.has_permits:
-            module.put()
-
     def __repr__(self):
         return "Module(name='%s')" % self.name

@@ -1,9 +1,7 @@
-import logging
 import zipfile
 from datetime import datetime
-from pvtranslator.models.entities.campaign import Campaign
-from pvtranslator.models.entities.curve import Curve
 from pvtranslator.models.entities.module import Module
+from pvtranslator.models.entity_managers.facade import create_campaign, create_curve
 
 
 def allowed_file(filename):
@@ -13,7 +11,6 @@ def allowed_file(filename):
 
 
 def parse_xls(_file):
-
     done = False
     error_msg = ''
     campaign_name = None
@@ -59,7 +56,6 @@ def parse_xls(_file):
 #   code == 1 -> complete
 #   code == 2 -> complete with errors
 def parse_zip(zip_file_storage, module_key):
-
     result_code = 1
     errors = []
     module = Module.get_by_key_name(key_names=module_key)
@@ -74,15 +70,15 @@ def parse_zip(zip_file_storage, module_key):
         _file = z_files.open(file_name, 'rU')
 
         done, error_msg, campaign_name, campaign_date, curve_hour, curve_v_values, \
-            curve_i_values, curve_p_values = parse_xls(_file)
+        curve_i_values, curve_p_values = parse_xls(_file)
         _file.close()
 
         if done:
             if not campaign:
-                campaign = Campaign.create_campaign(name=campaign_name, date=campaign_date, module=module)
+                campaign = create_campaign(name=campaign_name, date=campaign_date, module=module)
 
-            Curve.create_curve(hour=curve_hour, v_values=curve_v_values,
-                               i_values=curve_i_values, p_values=curve_p_values, campaign=campaign)
+            create_curve(hour=curve_hour, v_values=curve_v_values,
+                         i_values=curve_i_values, p_values=curve_p_values, campaign=campaign)
 
         else:
             errors.append(error_msg)
