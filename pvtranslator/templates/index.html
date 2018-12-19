@@ -2,9 +2,28 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>HelloWorld</title>
+    <title>Vista de Módulos</title>
 </head>
 <body>
-    {{msg}}
+    <table border="1">
+        <tr>
+            <th>Nombre</th>
+            <th>Usuario</th>
+            <th>Ver Más</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+        </tr>
+        <tr>
+            {% for modulo in modulos %}
+                <td>{{modulo.name}}</td>
+                <td>{{modulo.user}}</td>
+                <td><input type="submit" value="Ver más"/></td>
+                {% if modulo.has_permits() %}
+                <td><input type="submit" value="Editar"/></td>
+                <td><input type="submit" value="Eliminar"/></td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    </table>
 </body>
 </html>

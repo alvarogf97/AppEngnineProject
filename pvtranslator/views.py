@@ -1,5 +1,7 @@
 from flask import Flask, redirect, url_for, session, render_template, request
-from pvtranslator.models.utils.auth import google, get_user
+from pvtranslator.models.utils.auth import get_user
+from pvtranslator.models.entities.module import Module
+from pvtranslator.models.utils.auth import google
 from pvtranslator.models.utils.zip_parser import parse_zip
 
 app = Flask(__name__)
@@ -10,11 +12,23 @@ app.secret_key = 'development'
 @app.route('/')
 def index():
     user = get_user()
+    modulos = Module.all()
     if user:
-        return render_template('upload.html', module_key='test')
+        return render_template('index.html', modulos=modulos, usuario=user)
     else:
-        return render_template("index.html", msg="I dont know who are you!")
+        return render_template('index.html', modulos=modulos, usuario=user)
 
+@app.route('/upload_campaign', methods=['POST'])
+def upload_campaign():
+    uploaded_file = request.files.get('file_campaigns')
+    module_key = request.form.get('module_key')
+    code, errors = parse_zip(uploaded_file, module_key)
+    return render_template('index.html', msg=code, errors=errors)
+
+
+############################################
+#              login functions             #
+############################################
 
 @app.route('/login')
 def login():
@@ -40,10 +54,6 @@ def authorized(resp):
 def get_access_token():
     return session.get('access_token')
 
-
-@app.route('/upload_campaign', methods=['POST'])
-def upload_campaign():
-    uploaded_file = request.files.get('file_campaigns')
-    module_key = request.form.get('module_key')
-    msg = parse_zip(uploaded_file, module_key)
-    return render_template('index.html', msg=msg)
+############################################
+#             /login functions             #
+############################################
