@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Módulo </title>
+</head>
+<body>
+    {% block table %}
+        <table border="1">
+            <tr>
+                <th>Nombre</th>
+                <th>Fecha</th>
+                <th>Módulo</th>
+                <th>Usuario</th>
+            </tr>
+            <tr>
+                {% for campana in campanas %}
+                <td>{{campanas.name}}</td>
+                <td>{{campanas.date}}</td>
+                <td>{{campanas.module}}</td>
+                <td>{{campanas.user}}</td>
+                {% endfor %}
+            </tr>
+        </table>
+    {% endblock table %}
+    <form action="{{ url_for('upload_campaign')}}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="module_key" value={{ module_key }}>
+        <input type="file" name="file_campaigns" >
+        <input type="submit" value="Añadir Campaña">
+    </form>
+</body>
+</html>

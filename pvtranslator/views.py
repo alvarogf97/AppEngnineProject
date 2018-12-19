@@ -1,4 +1,6 @@
 from flask import Flask, redirect, url_for, session, render_template, request
+
+from pvtranslator.models.entities.campaign import Campaign
 from pvtranslator.models.utils.auth import get_user
 from pvtranslator.models.entities.module import Module
 from pvtranslator.models.utils.auth import google
@@ -8,15 +10,14 @@ app = Flask(__name__)
 app.debug = True
 app.secret_key = 'development'
 
-
 @app.route('/')
 def index():
-    user = get_user()
-    modulos = Module.all()
-    if user:
-        return render_template('index.html', modulos=modulos, usuario=user)
-    else:
-        return render_template('index.html', modulos=modulos, usuario=user)
+    return render_template('index.html', modulos=Module.all(), usuario=get_user())
+
+@app.route('/module')
+def module():
+    campanas = Campaign.all()
+    return render_template('viewModule.html', campanas=campanas)
 
 @app.route('/upload_campaign', methods=['POST'])
 def upload_campaign():
