@@ -16,7 +16,7 @@ def index():
     return render_template('index.html', modulos=Module.all(), usuario=get_user())
 
 @app.route('/viewmodule')
-def module():
+def viewmodule():
     campanas = Campaign.all()
     modulo = request.form.get('modulo')
     campanas.filter('module =', modulo)
