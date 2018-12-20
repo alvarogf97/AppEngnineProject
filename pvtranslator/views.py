@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, session, render_template, request
 
 from pvtranslator.models.entities.campaign import Campaign
+from pvtranslator.models.entity_managers import facade
 from pvtranslator.models.utils.auth import get_user
 from pvtranslator.models.entities.module import Module
 from pvtranslator.models.utils.auth import google
@@ -14,10 +15,18 @@ app.secret_key = 'development'
 def index():
     return render_template('index.html', modulos=Module.all(), usuario=get_user())
 
-@app.route('/module')
+@app.route('/viewmodule')
 def module():
     campanas = Campaign.all()
-    return render_template('viewModule.html', campanas=campanas)
+    modulo = request.form.get('modulo')
+    campanas.filter('module =', modulo)
+    return render_template('viewModule.html', campanas=campanas, module_key=modulo.name)
+
+@app.route('/deletemodule')
+def deletemodule():
+    modulo = request.form.get('modulo')
+    facade.delete_module(modulo)
+    return render_template('index.html',modulos=Module.all())
 
 @app.route('/upload_campaign', methods=['POST'])
 def upload_campaign():

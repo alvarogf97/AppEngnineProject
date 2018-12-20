@@ -13,7 +13,7 @@
         <tr>
             <th>Nombre</th>
             <th>Usuario</th>
-            <th>Ver Más</th>
+            <th>Ver Campañas</th>
             <th>Editar</th>
             <th>Eliminar</th>
         </tr>
@@ -22,14 +22,24 @@
                 <td>{{modulo.name}}</td>
                 <td>{{modulo.user}}</td>
                 <td>
-                    <form action="{{ url_for('module') }}">
-                        <input type="submit" value="Ver más"/>
-                        <input type="hidden" value={{ modulo.name }}/>
+                    <form action="{{ url_for('viewmodule') }}">
+                        <input type="submit" value="Ver Campañas"/>
+                        <input type="hidden" id="modulo" value={{ modulo }}/>
                     </form>
                 </td>
                 {% if modulo.has_permits() %}
-                <td><input type="submit" value="Editar"/></td>
-                <td><input type="submit" value="Eliminar"/></td>
+                    <td>
+                        <form action="{{ url_for('editmodule') }}">
+                            <input type="submit" value="Editar"/>
+                            <input type="hidden" id="modulo" value="{{ modulo }}"/>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('deletemodule') }}">
+                            <input type="submit" value="Eliminar"/>
+                            <input type="hidden" id="modulo" value="{{ modulo }}"/>
+                        </form>
+                    </td>
                 {% endif %}
             {% endfor %}
         </tr>
