@@ -6,7 +6,15 @@
 </head>
 <body>
     {% block navbar %}
+        {% include "navBar.html" %}
     {% endblock navbar %}
+
+    {% if user %}
+        <form action="{{ url_for('create_module') }}" method="POST">
+            <input name="name" type="text">
+            <input type="submit" value="Crear Módulo"/>
+        </form>
+    {% endif %}
 
     {% block table %}
     <table border="1">
@@ -17,32 +25,17 @@
             <th>Editar</th>
             <th>Eliminar</th>
         </tr>
-        <tr>
-            {% for modulo in modulos %}
-                <td>{{modulo.name}}</td>
-                <td>{{modulo.user}}</td>
-                <td>
-                    <form action="{{ url_for('viewmodule') }}">
-                        <input type="submit" value="Ver Campañas"/>
-                        <input type="hidden" id="modulo" value={{ modulo }}/>
-                    </form>
-                </td>
-                {% if modulo.has_permits() %}
-                    <td>
-                        <form action="{{ url_for('editmodule') }}">
-                            <input type="submit" value="Editar"/>
-                            <input type="hidden" id="modulo" value="{{ modulo }}"/>
-                        </form>
-                    </td>
-                    <td>
-                        <form action="{{ url_for('deletemodule') }}">
-                            <input type="submit" value="Eliminar"/>
-                            <input type="hidden" id="modulo" value="{{ modulo }}"/>
-                        </form>
-                    </td>
+        {% for module in modules %}
+            <tr>
+                <td>{{module.name}}</td>
+                <td>{{module.user.email}}</td>
+                <td><button type="button" onclick="window.location.href='{{ url_for('view_module', module_key=module.name) }}'">Ver Campañas</button></td>
+                {% if module.has_permits() %}
+                    <td><button type="button" onclick="window.location.href='{{ url_for('edit_module', module_key=module.name) }}'">Editar</button></td>
+                    <td><button type="button" onclick="window.location.href='{{ url_for('delete_module', module_key=module.name) }}'">Eliminar</button></td>
                 {% endif %}
-            {% endfor %}
-        </tr>
+            </tr>
+        {% endfor %}
     </table>
     {% endblock table %}
 </body>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edición de Módulos</title>
+</head>
+<body>
+    {% block navbar %}
+        {% include "navBar.html" %}
+    {% endblock navbar %}
+
+    <form action="{{ url_for('save_module') }}" method="post">
+        Nombre:<br/><input type="text" name="name" value="{{ module.name }}"/><br/>
+        Email:<br/><input type="text" name="user" value="{{ module.user.email }}"/><br/>
+        <input type="submit" value="Guardar"/>
+    </form>
+</body>
+</html>

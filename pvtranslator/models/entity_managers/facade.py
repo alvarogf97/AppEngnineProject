@@ -14,7 +14,13 @@ def create_module(name):
     from pvtranslator.models.utils.auth import get_user
     user = get_user()
     if user:
-        return Module.get_or_insert(key_name=name, name=name, user=user)
+        db_module = Module.get_by_key_name(key_names=name)
+        if db_module:
+            return None
+        else:
+            module = Module(key_name=name, name=name, user=user)
+            module.put()
+            return module
     else:
         return None
 
@@ -33,8 +39,14 @@ def create_campaign(name, date, module):
     from pvtranslator.models.utils.auth import get_user
     user = get_user()
     if user:
-        return Campaign.get_or_insert(key_name=name + "_" + module.name,
-                                      name=name, date=date, module=module, user=get_user())
+        db_campaign = Campaign.get_by_key_name(key_names=name + "_" + module.name)
+        if db_campaign:
+            return None
+        else:
+            campaign = Campaign(key_name=name + "_" + module.name,
+                                name=name, date=date, module=module, user=get_user())
+            campaign.put()
+            return campaign
     else:
         return None
 
