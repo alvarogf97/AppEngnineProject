@@ -9,6 +9,8 @@
         {% include "navBar.html" %}
     {% endblock navbar %}
 
+    <button type="button" onclick="window.location.href='{{ url_for('create_campaign', key_module=module_key) }}'">Añadir Campaña</button>
+
     {% block table %}
         <table border="1">
             <tr>

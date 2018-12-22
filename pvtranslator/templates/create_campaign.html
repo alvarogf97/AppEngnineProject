@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear una nueva campaña</title>
+</head>
+<body>
+    <form action="{{ url_for('save_new_campaign') }}" method="post">
+        Nombre:<br/><input type="text" name="name"><br/>
+        Fecha:<br/><input type="date" name="date"><br/>
+        <input type="hidden" value="{{ key_module }}" name="key_module"/>
+        <input type="submit" value="Crear">
+    </form>
+</body>
+</html>

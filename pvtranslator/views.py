@@ -1,4 +1,7 @@
+
 from flask import Flask, redirect, url_for, session, render_template, request
+from google.storage.speckle.python.api.rdbms import Date
+
 from pvtranslator.models.entities.campaign import Campaign
 from pvtranslator.models.entity_managers import facade
 from pvtranslator.models.utils.auth import get_user
@@ -65,8 +68,9 @@ def delete_campaign(campaign_key):
     campaign = Campaign.get_by_key_name(key_names=campaign_key)
     name = campaign.module.name
     if campaign:
-        facade.delete_module(campaign)
-    return redirect(url_for('view_module', module_key=name))
+        facade.delete_campaign(campaign)
+        module = Module.get_by_key_name(key_names=name)
+    return redirect(url_for('view_module', module_key=name, campaigns=module.campaigns))
 
 
 @app.route('/edit_campaign/<campaign_key>', methods=['GET'])
@@ -78,12 +82,33 @@ def edit_campaign(campaign_key):
 
 @app.route('/save_campaign/', methods=['POST'])
 def save_campaign():
+    date = request.form.get('date')
+    name = request.form.get('name')
+    module_name = request.form.get('module')
+    campaign = Campaign.get_by_key_name(key_names=name + "_" + module_name)
+    splited_date = date.split("-")
+    #Aqui es el problema
+    format_date = Date(splited_date[0], splited_date[1], splited_date[2])
+    campaign.date = format_date
+    return redirect(url_for('index'))
+
+
+@app.route('/save_new_campaign/', methods=['POST'])
+def save_new_campaign():
     name = request.form.get('name')
     date = request.form.get('date')
-    moduleName = request.form.get('module')
-    userName = request.form.get('user')
-    #Seguir con esto
+    key_module = request.form.get('key_module')
+    module = Module.get_by_key_name(key_names=key_module)
+    splited_date = date.split("-")
+    # Aqui es el problema
+    format_date = Date(splited_date[0], splited_date[1], splited_date[2])
+    facade.create_campaign(name, format_date, module)
     return redirect(url_for('index'))
+
+
+@app.route('/create_campaign/<key_module>')
+def create_campaign(key_module):
+    return render_template('create_campaign.html', key_module=key_module)
 
 
 @app.route('/upload_campaign', methods=['POST'])
