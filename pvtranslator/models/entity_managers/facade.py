@@ -1,3 +1,5 @@
+import logging
+
 from google.appengine.ext import db
 from pvtranslator.models.entities.campaign import Campaign
 from pvtranslator.models.entities.curve import Curve

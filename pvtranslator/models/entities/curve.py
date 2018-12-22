@@ -12,7 +12,7 @@ class Curve(db.Model):
     def has_permits(self):
         from pvtranslator.models.utils.auth import get_user
         user = get_user()
-        if user is not None and self.campaign.user.id == user.id or self.campaign.module.user_id.id == user.id:
+        if user is not None and (self.campaign.user.id == user.id or self.campaign.module.user_id.id == user.id):
             return True
         return False
 
