@@ -34,7 +34,7 @@
                     <td>
                         <form action="{{ url_for('delete_module') }}" method="POST">
                             <input type="hidden" name="module_key" value={{ module.key().name() }}>
-                            <input type="submit" value="Eliminar"/>
+                            <input type="submit" value="Delete"/>
                         </form>
                     </td>
                     <td><button type="button" onclick="window.location.href='{{ url_for('edit_module', module_key=module.key().name()) }}'">Edit</button>
