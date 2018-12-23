@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All curves from {{ campaign.name }}</title>
+</head>
+<body>
+    {% block navbar %}
+        {% include "navBar.html" %}
+    {% endblock navbar %}
+    <table>
+        <tr>
+            <td><b>Hour</b></td>
+        </tr>
+        {% for curve in campaign.curves %}
+            <tr>
+                <td>{{ curve.hour }}</td>
+                <form method="get" action="{{ url_for('draw_curve', curve_key=curve.key().name()) }}">
+                    <td><input type="submit" value="Enter"></td>
+                </form>
+                {% if curve.has_permits() %}
+                <form method="post" action="{{ url_for('delete_curve') }}">
+                    <input type="hidden" id="curve_key" name="curve_key" value={{ curve.key().name() }}>
+                    <input type="hidden" id="campaign_key" name="campaign_key" value={{ curve.campaign.key().name() }}>
+                    <td><input type="submit" value="Delete"></td>
+                </form>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
