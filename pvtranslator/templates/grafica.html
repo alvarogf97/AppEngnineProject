@@ -31,34 +31,44 @@
         {% include "navBar.html" %}
     {% endblock navbar %}
 
-    <table>
+    <div class="row1" class="float-center">
+        <div id="curveIV" class="float-center" style="height: 500px; overflow-x: scroll"></div>
+        <div class="column" style="max-height: 500px; overflow-y: scroll">
+            <table>
+                <tr>
+                    <td style="max-height: 500px">
+                        <table class=".scroll">
+                            {% for point in iv %}
+                                <tr>
+                                    <td>{{ point[1] }}</td>
+                                    <td>{{ point[0] }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 
-        <tr>
-            <td id="curvePV" style="width: 800px; height: 500px"></td>
-            <td style="max-height: 500px">
-                <table class=".scroll">
-                    {% for point in pv %}
-                        <tr>
-                            <td>{{ point[1] }}</td>
-                            <td>{{ point[0] }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td id="curveIV" style="width: 800px; height: 500px"></td>
-            <td>
-                <table border="1">
-                    {% for point in iv %}
-                        <tr>
-                            <td>{{ point[1] }}</td>
-                            <td>{{ point[0] }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </td>
-        </tr>
-    </table>
+    <div class="row1" class="float-center">
+        <div id="curvePV" class="float-center" style="height: 500px; overflow-x: scroll"></div>
+        <div class="column medium-4" style="max-height: 500px; overflow-y: scroll">
+            <table>
+                <tr>
+                    <td style="max-height: 500px">
+                        <table class=".scroll">
+                            {% for point in pv %}
+                                <tr>
+                                    <td>{{ point[1] }}</td>
+                                    <td>{{ point[0] }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
   </body>
 </html>

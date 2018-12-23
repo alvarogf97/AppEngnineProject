@@ -187,7 +187,7 @@ def upload_campaign():
 def draw_curve(curve_key):
     curve = Curve.get_by_key_name(key_names=curve_key)
     iv = [['Voltage', 'Intensity']]
-    pv = [['Voltage', 'Potential']]
+    pv = [['Voltage', 'Resistance']]
     for i in range(0, len(curve.i_values)):
         iv.append([curve.v_values[i], curve.i_values[i]])
         pv.append([curve.v_values[i], curve.p_values[i]])
