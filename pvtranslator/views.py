@@ -11,6 +11,7 @@ from pvtranslator.models.utils.zip_parser import parse_zip
 app = Flask(__name__)
 app.debug = True
 app.secret_key = 'development'
+app._static_folder = "./static"
 
 
 ############################################
@@ -24,6 +25,7 @@ app.secret_key = 'development'
 #   errors -> not required
 @app.route('/', methods=['GET'])
 def index():
+    print(app.static_folder)
     errors = request.args.get('errors')
     return render_template('index.html', modules=Module.all(), user=get_user(), errors=errors)
 

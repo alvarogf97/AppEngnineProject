@@ -2,12 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='foundation/css/foundation.css') }}" />
+    <script type="text/javascript" src="{{ url_for('static', filename='foundation/js/vendor/foundation.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='foundation/js/vendor/foundation.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='foundation/js/vendor/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='foundation/js/vendor/what-input.js') }}"></script>
     <title></title>
 </head>
 <body>
-    <table style="margin-left: 91%">
-            <td><form action="{{ url_for('login') }}"><input type="submit" value="Log In"/></form></td>
-            <td><form action="{{ url_for('logout') }}"><input type="submit" value="Log Out"/></form></td>
-    </table>
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <ul class="dropdown menu" data-dropdown-menu>
+          <li class="menu-text">Site Title</li>
+          <li><a href="#">Two</a></li>
+          <li><a href="#">Three</a></li>
+        </ul>
+      </div>
+      <div class="top-bar-right">
+        <ul class="menu">
+          <li><button type="button" onclick="window.location.href='{{ url_for('login')}}'" class="button mr-5">Login</button></li>
+          <li><button type="button" onclick="window.location.href='{{ url_for('logout')}}'" class="alert button">Logout</button></li>
+        </ul>
+      </div>
+    </div>
 </body>
 </html>

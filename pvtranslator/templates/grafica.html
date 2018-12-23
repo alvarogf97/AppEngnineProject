@@ -26,14 +26,17 @@
     </script>
   </head>
   <body>
+
     {% block navbar %}
         {% include "navBar.html" %}
     {% endblock navbar %}
+
     <table>
+
         <tr>
             <td id="curvePV" style="width: 800px; height: 500px"></td>
-            <td>
-                <table border="1">
+            <td style="max-height: 500px">
+                <table class=".scroll">
                     {% for point in pv %}
                         <tr>
                             <td>{{ point[1] }}</td>
