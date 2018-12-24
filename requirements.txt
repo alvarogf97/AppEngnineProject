@@ -1,3 +1,7 @@
 Flask==1.0.2
 Flask-OAuth
+flask-wtf
+wtforms
+werkzeug
 jinja2
+google

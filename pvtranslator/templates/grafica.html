@@ -1,0 +1,90 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+          //var dataPV = google.visualization.arrayToDataTable();
+        var dataPV = google.visualization.arrayToDataTable({{ pv | safe }});
+        var dataIV = google.visualization.arrayToDataTable({{ iv | safe }});
+        var optionsIV = {
+          title: 'IV Graphic',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+        var optionsPV = {
+          title: 'PV Graphic',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+        var chartPV = new google.visualization.LineChart(document.getElementById('curvePV'));
+        var chartIV = new google.visualization.LineChart(document.getElementById('curveIV'));
+        chartPV.draw(dataPV, optionsPV);
+        chartIV.draw(dataIV, optionsIV);
+      }
+    </script>
+  </head>
+
+  <body>
+
+    {% block navbar %}
+        {% include "navBar.html" %}
+    {% endblock navbar %}
+
+    <div class="columns">
+        <div class="column">
+            <div class="column">
+                <div id="curveIV" class="is-fullwidth" style="min-height: 450px; overflow-x: scroll"></div>
+            </div>
+            <div class="column" style="overflow-y: scroll;">
+                <table class="table is-hoverable is-fullwidth">
+                  <thead>
+                    {% for point in iv[:1] %}
+                        <tr>
+                          <th class="has-text-centered">{{ point[1] }}</th>
+                          <th class="has-text-centered">{{ point[0] }}</th>
+                        </tr>
+                    {% endfor %}
+                  </thead>
+                  <tbody>
+                    {% for point in iv[1:] %}
+                        <tr>
+                            <td class="has-text-centered">{{ point[1] }}</td>
+                            <td class="has-text-centered">{{ point[0] }}</td>
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+        </div>
+        <hr>
+        <div class="column">
+            <div class="column">
+                <div class="is-fullwidth" id="curvePV" style="min-height: 450px; overflow-x: scroll"></div>
+            </div>
+            <div class="column" style="overflow-y: scroll">
+                <table class="table is-hoverable is-fullwidth">
+                  <thead>
+                    {% for point in pv[:1] %}
+                        <tr>
+                          <th class="has-text-centered">{{ point[1] }}</th>
+                          <th class="has-text-centered">{{ point[0] }}</th>
+                        </tr>
+                    {% endfor %}
+                  </thead>
+                  <tbody>
+                    {% for point in pv[1:] %}
+                        <tr>
+                            <td class="has-text-centered">{{ point[1] }}</td>
+                            <td class="has-text-centered">{{ point[0] }}</td>
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+  </body>
+</html>

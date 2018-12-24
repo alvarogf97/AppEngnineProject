@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edición de Campañas</title>
+</head>
+<body>
+    {% block navbar %}
+        {% include "navBar.html" %}
+    {% endblock navbar %}
+
+    <form action="{{ url_for('save_campaign') }}" method="post">
+        Nombre:<br/><input type="text" name="name" value="{{ campaign.name }}"/><br/>
+        Fecha:<br/><input type="date" name="date" value="{{ campaign.date }}"/><br/>
+        <input type="hidden" name="campaign_key" value="{{ campaign.key().name() }}"/>
+        <input type="submit" value="Guardar"/>
+    </form>
+</body>
+</html>

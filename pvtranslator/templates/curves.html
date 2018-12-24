@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>curves</title>
+</head>
+<body>
+
+    {% block navbar %}
+        {% include "navBar.html" %}
+    {% endblock navbar %}
+
+    <div style="width: 60%; margin-left: auto; margin-right: auto;">
+        <table class="table is-hoverable is-fullwidth" style="margin-left: auto; margin-right: auto; margin-top: 20px">
+          <thead>
+            <tr>
+              <th class="has-text-centered">Hour</th>
+              <th class="has-text-centered">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for curve in curves %}
+                <tr>
+                    <td class="has-text-centered">{{ curve.hour }}</td>
+                    <td class="has-text-centered">
+                        <div class="columns is-vcentered is-centered">
+                          <div class="column">
+                              <button type="button" onclick="window.location.href='{{ url_for('draw_curve', curve_key=curve.key().name()) }}'" class="button is-fullwidth is-link is-outlined is-rounded">
+                                  <div class="columns">
+                                      <div class="column">
+                                          <span class="icon">
+                                              <i class="fas fa-eject"></i>
+                                          </span></div>
+                                      <div class="is-divider-vertical"></div>
+                                      <div class="column">
+                                        Enter
+                                      </div>
+                                  </div>
+                              </button>
+                          </div>
+                          {% if curve.has_permits(user) %}
+                              <div class="column">
+                                <form method="post" action="{{ url_for('delete_curve') }}">
+                                    <input type="hidden" id="curve_key" name="curve_key" value={{ curve.key().name() }}>
+                                    <input type="hidden" id="campaign_key" name="campaign_key" value={{ curve.campaign.key().name() }}>
+                                    <button type="submit" class="button is-fullwidth is-danger is-rounded is-outlined">
+                                      <div class="columns">
+                                          <div class="column">
+                                              <span class="icon">
+                                                  <i class="far fa-trash-alt"></i>
+                                              </span></div>
+                                          <div class="is-divider-vertical"></div>
+                                          <div class="column">
+                                            Delete
+                                          </div>
+                                      </div>
+                                    </button>
+                                </form>
+                              </div>
+                          {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
