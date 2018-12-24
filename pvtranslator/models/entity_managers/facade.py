@@ -1,5 +1,6 @@
 from google.appengine.ext import db
 from pvtranslator.models.entities.campaign import Campaign
+from pvtranslator.models.entities.comment import Comment
 from pvtranslator.models.entities.curve import Curve
 from pvtranslator.models.entities.module import Module
 from pvtranslator.models.entities.user import User
@@ -113,3 +114,12 @@ def edit_curve(curve):
     from pvtranslator.models.utils.auth import get_user
     if curve.campaign.has_permits(get_user()):
         curve.put()
+
+
+def create_comment(text, module, user):
+    new = Comment(key_name=module.name+"_"+str(module.comments.count() + 1),text=text, module=module, user=user)
+    new.put()
+
+
+def delete_comment(comment):
+    db.delete(comment)

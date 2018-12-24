@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, session, render_template, request
 from datetime import datetime
 from pvtranslator.models.entities.campaign import Campaign
+from pvtranslator.models.entities.comment import Comment
 from pvtranslator.models.entities.curve import Curve
 from pvtranslator.models.entity_managers import facade
 from pvtranslator.models.utils.auth import get_user
@@ -86,6 +87,23 @@ def save_module():
 #            campaign functions            #
 ############################################
 
+@app.route('/create/comment/', methods=['POST'])
+def new_comment():
+    text = request.form.get('text')
+    user = get_user()
+    module = Module.get_by_key_name(key_names=request.form.get('module_key'))
+    facade.create_comment(text=text, module=module, user=user)
+    return redirect(url_for('index_campaigns', module_key=module.key().name()))
+
+
+@app.route('/delete/comment/', methods=['POST'])
+def delete_comment():
+    comment = Comment.get_by_key_name(request.form.get('comment_key'))
+    module_key = comment.module.key().name()
+    facade.delete_comment(comment)
+    return redirect(url_for('index_campaigns', module_key=module_key))
+
+
 # template attributes:
 #   campaigns -> required
 #   module_key -> required
@@ -96,7 +114,7 @@ def index_campaigns(module_key):
     errors = request.args.get('errors')
     module = Module.get_by_key_name(key_names=module_key)
     campaigns = module.campaigns
-    return render_template('index_campaign.html', campaigns=campaigns, module_key=module_key, user=get_user(), errors=errors)
+    return render_template('index_campaign.html', campaigns=campaigns, module=module, user=get_user(), errors=errors)
 
 
 # form attributes:

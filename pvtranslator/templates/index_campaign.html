@@ -9,7 +9,7 @@
     {% endblock navbar %}
 
     {% if user %}
-    <button type="button" onclick="window.location.href='{{ url_for('create_campaign', key_module=module_key) }}'">Add campaign</button>
+    <button type="button" onclick="window.location.href='{{ url_for('create_campaign', key_module=module.key().name()) }}'">Add campaign</button>
     {% endif %}
     {% block table %}
         <table border="1">
@@ -47,7 +47,7 @@
     <br>
     {% if user %}
     <form action="{{ url_for('upload_campaign')}}" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="module_key" value={{ module_key }}>
+        <input type="hidden" name="module_key" value={{ module.key().name() }}>
         <input type="file" name="file_campaigns" >
         <input type="submit" value="Add">
     </form>
@@ -56,6 +56,32 @@
     {% if errors %}
         <p>{{ errors }}</p>
     {% endif %}
+
+    <hr>
+
+    {% if user %}
+        <h1>New comment:</h1>
+            <form action="{{ url_for('new_comment')}}" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="module_key" value={{ module.key().name() }}>
+                Comment text:<input type="text" name="text">
+                <input type="submit" value="Add comment">
+            </form>
+        <hr>
+    {% endif %}
+
+<h1><strong>Comments</strong></h1>
+
+    {% for comment in module.comments %}
+        <hr>
+        <p>{{ comment.text }}</p>
+        {% if comment.has_permits(user) %}
+            <form action="{{ url_for('delete_comment')}}" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="module_key" value={{ module.key().name() }}>
+                <input type="hidden" name="comment_key" value="{{ comment.key().name() }}" >
+                <input type="submit" value="Delete">
+            </form>
+        {% endif %}
+    {% endfor %}
 
 </body>
 </html>
