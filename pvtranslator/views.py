@@ -96,7 +96,6 @@ def index_campaigns(module_key):
     errors = request.args.get('errors')
     module = Module.get_by_key_name(key_names=module_key)
     campaigns = module.campaigns
-    user = get_user()
     return render_template('index_campaign.html', campaigns=campaigns, module_key=module_key, user=get_user(), errors=errors)
 
 
@@ -196,9 +195,9 @@ def draw_curve(curve_key):
 
 @app.route('/module/campaign/curves/<campaign_key>', methods=['GET'])
 def show_curves(campaign_key):
-    user = get_user()
     campaign = Campaign.get_by_key_name(campaign_key)
-    return render_template('curves.html', campaign=campaign)
+    curves = campaign.curves
+    return render_template('curves.html', curves=curves, user=get_user())
 
 
 @app.route('/delete/curve/', methods=['POST'])

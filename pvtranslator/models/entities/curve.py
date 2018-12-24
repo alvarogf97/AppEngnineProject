@@ -9,9 +9,7 @@ class Curve(db.Model):
     p_values = db.ListProperty(float)
     campaign = db.ReferenceProperty(Campaign, collection_name='curves')
 
-    def has_permits(self):
-        from pvtranslator.models.utils.auth import get_user
-        user = get_user()
+    def has_permits(self, user):
         if user is not None:
             if self.campaign.user.id == user.id or self.campaign.module.user.id == user.id:
                 return True

@@ -34,7 +34,8 @@ def create_module(name):
 
 
 def delete_module(module):
-    if module.has_permits:
+    from pvtranslator.models.utils.auth import get_user
+    if module.has_permits(get_user()):
         for campaign in module.campaigns:
             delete_campaign(campaign)
         db.delete(module)
@@ -72,15 +73,17 @@ def create_campaign(name, date, module):
 
 
 def delete_campaign(campaign):
-    if campaign.has_permits:
+    from pvtranslator.models.utils.auth import get_user
+    if campaign.has_permits(get_user()):
         for curve in campaign.curves:
             delete_curve(curve)
         db.delete(campaign)
 
 
 def edit_campaign(campaign):
+    from pvtranslator.models.utils.auth import get_user
     errors = []
-    if campaign.has_permits and not exists_campaign(campaign):
+    if campaign.has_permits(get_user()) and not exists_campaign(campaign):
         curves = campaign.curves
         name = campaign.name
         date = campaign.date
@@ -101,10 +104,12 @@ def create_curve(hour, v_values, i_values, p_values, campaign):
 
 
 def delete_curve(curve):
-    if curve.campaign.has_permits():
+    from pvtranslator.models.utils.auth import get_user
+    if curve.campaign.has_permits(get_user()):
         db.delete(curve)
 
 
 def edit_curve(curve):
-    if curve.campaign.has_permits():
+    from pvtranslator.models.utils.auth import get_user
+    if curve.campaign.has_permits(get_user()):
         curve.put()

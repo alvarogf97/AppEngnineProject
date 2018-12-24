@@ -25,50 +25,66 @@
       }
     </script>
   </head>
+
   <body>
 
     {% block navbar %}
         {% include "navBar.html" %}
     {% endblock navbar %}
 
-    <div class="row1" class="float-center">
-        <div id="curveIV" class="float-center" style="height: 500px; overflow-x: scroll"></div>
-        <div class="column" style="max-height: 500px; overflow-y: scroll">
-            <table>
-                <tr>
-                    <td style="max-height: 500px">
-                        <table class=".scroll">
-                            {% for point in iv %}
-                                <tr>
-                                    <td>{{ point[1] }}</td>
-                                    <td>{{ point[0] }}</td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    </td>
-                </tr>
-            </table>
+    <div class="columns">
+        <div class="column">
+            <div class="column">
+                <div id="curveIV" class="is-fullwidth" style="min-height: 450px; overflow-x: scroll"></div>
+            </div>
+            <div class="column" style="overflow-y: scroll;">
+                <table class="table is-hoverable is-fullwidth">
+                  <thead>
+                    {% for point in iv[:1] %}
+                        <tr>
+                          <th class="has-text-centered">{{ point[1] }}</th>
+                          <th class="has-text-centered">{{ point[0] }}</th>
+                        </tr>
+                    {% endfor %}
+                  </thead>
+                  <tbody>
+                    {% for point in iv[1:] %}
+                        <tr>
+                            <td class="has-text-centered">{{ point[1] }}</td>
+                            <td class="has-text-centered">{{ point[0] }}</td>
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+        </div>
+        <hr>
+        <div class="column">
+            <div class="column">
+                <div class="is-fullwidth" id="curvePV" style="min-height: 450px; overflow-x: scroll"></div>
+            </div>
+            <div class="column" style="overflow-y: scroll">
+                <table class="table is-hoverable is-fullwidth">
+                  <thead>
+                    {% for point in pv[:1] %}
+                        <tr>
+                          <th class="has-text-centered">{{ point[1] }}</th>
+                          <th class="has-text-centered">{{ point[0] }}</th>
+                        </tr>
+                    {% endfor %}
+                  </thead>
+                  <tbody>
+                    {% for point in pv[1:] %}
+                        <tr>
+                            <td class="has-text-centered">{{ point[1] }}</td>
+                            <td class="has-text-centered">{{ point[0] }}</td>
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <div class="row1" class="float-center">
-        <div id="curvePV" class="float-center" style="height: 500px; overflow-x: scroll"></div>
-        <div class="column medium-4" style="max-height: 500px; overflow-y: scroll">
-            <table>
-                <tr>
-                    <td style="max-height: 500px">
-                        <table class=".scroll">
-                            {% for point in pv %}
-                                <tr>
-                                    <td>{{ point[1] }}</td>
-                                    <td>{{ point[0] }}</td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
   </body>
 </html>

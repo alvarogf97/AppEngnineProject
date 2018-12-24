@@ -9,9 +9,7 @@ class Campaign(db.Model):
     module = db.ReferenceProperty(Module, collection_name='campaigns')
     user = db.ReferenceProperty(User)
 
-    def has_permits(self):
-        from pvtranslator.models.utils.auth import get_user
-        user = get_user()
+    def has_permits(self, user):
         if user is not None:
             if self.user.id == user.id or self.module.user.id == user.id:
                 return True

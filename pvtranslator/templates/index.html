@@ -30,7 +30,7 @@
                 <td>{{module.name}}</td>
                 <td>{{module.user.email}}</td>
                 <td><button type="button" onclick="window.location.href='{{ url_for('index_campaigns', module_key=module.key().name()) }}'">Show campaign</button></td>
-                {% if module.has_permits() %}
+                {% if module.has_permits(user) %}
                     <td>
                         <form action="{{ url_for('delete_module') }}" method="POST">
                             <input type="hidden" name="module_key" value={{ module.key().name() }}>
