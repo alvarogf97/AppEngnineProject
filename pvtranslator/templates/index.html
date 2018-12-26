@@ -10,13 +10,17 @@
     {% endblock navbar %}
 
     {% if user %}
-        <div style="width: 20%; margin-left: auto; margin-right: auto;">
+        <div class="is-flex is-vcentered" style="display: flex; justify-content: center; margin-top: 50px">
             <form action="{{ url_for('create_module') }}" method="POST">
-                <div class="field">
-                    <label class="label">Module Name</label>
-                    <div class="control">
-                        <input name="name" type="text" >
-                        <input class="button is-link is-small is-rounded is-outlined" type="submit" value="Create module"/>
+                <div class="columns is-vcentered">
+                    <div class="column has-text-centered">
+                        <label class="label">Module Name:</label>
+                    </div>
+                    <div class="column">
+                        <input class="input is-rounded is-hoverable" name="name" type="text" >
+                    </div>
+                    <div class="column">
+                        <input class="button is-link is-fullwidth is-rounded is-outlined" type="submit" value="Create module"/>
                     </div>
                 </div>
             </form>
@@ -24,32 +28,38 @@
     {% endif %}
 
     {% block table %}
-    <div style="width: 60%; margin-left: auto; margin-right: auto;">
-        <table class="table is-hoverable is-striped is-fullwidth" style="text-align: center;">
+    <div class="is-vcentered is-flex" style="display: flex; justify-content: center; margin-top: 80px">
+        <table class="table is-hoverable is-striped is-fullwidth" style="width: 60%">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>User</th>
-                    <th>Show campaigns</th>
-                    <th>Delete</th>
-                    <th>Edit</th>
+                    <th class="has-text-centered">Name</th>
+                    <th class="has-text-centered">User</th>
+                    <th class="has-text-centered">Actions</th>
                 </tr>
             </thead>
 
             {% for module in modules %}
                 <tr>
-                    <td>{{module.name}}</td>
-                    <td>{{module.user.email}}</td>
-                    <td><button class="button is-small is-link is-rounded is-outlined" type="button" onclick="window.location.href='{{ url_for('index_campaigns', module_key=module.key().name()) }}'">Show campaign</button></td>
-                    {% if module.has_permits(user) %}
-                        <td>
-                            <form action="{{ url_for('delete_module') }}" method="POST">
-                                <input type="hidden" name="module_key" value={{ module.key().name() }}>
-                                <input class="button is-small is-danger is-rounded is-outlined" type="submit" value="Delete"/>
-                            </form>
-                        </td>
-                        <td><button class="button is-small is-warning is-rounded is-outlined" type="button" onclick="window.location.href='{{ url_for('edit_module', module_key=module.key().name()) }}'">Edit</button>
-                    {% endif %}
+                    <td class="has-text-centered">{{module.name}}</td>
+                    <td class="has-text-centered">{{module.user.email}}</td>
+                    <td class="has-text-centered">
+                        <div class="columns">
+                            <div class="column">
+                                <button class="button is-fullwidth is-link is-rounded is-outlined" type="button" onclick="window.location.href='{{ url_for('index_campaigns', module_key=module.key().name()) }}'">Show campaigns</button>
+                            </div>
+                            {% if module.has_permits(user) %}
+                                <div class="column">
+                                    <form action="{{ url_for('delete_module') }}" method="POST">
+                                        <input type="hidden" name="module_key" value={{ module.key().name() }}>
+                                        <input class="button is-fullwidth is-danger is-rounded is-outlined" type="submit" value="Delete"/>
+                                    </form>
+                                </div>
+                                <div class="column">
+                                    <button class="button is-fullwidth is-warning is-rounded is-outlined" type="button" onclick="window.location.href='{{ url_for('edit_module', module_key=module.key().name()) }}'">Edit</button>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </td>
                 </tr>
             {% endfor %}
         </table>

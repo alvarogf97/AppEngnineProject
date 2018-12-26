@@ -4,25 +4,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Module Editing</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.0/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-    <!-- <link rel="stylesheet" href="styles/debug.css"> -->
 </head>
 <body>
     {% block navbar %}
         {% include "navBar.html" %}
     {% endblock navbar %}
-    <div style="width: 20%; margin-left: auto; margin-right: auto;">
-        <form action="{{ url_for('save_module') }}" method="post">
-            <div class="field">
-                <label class="label">Name:</label>
-                <div class="control">
-                     <input type="text" name="name" value="{{ module.name }}"/>
-                     <input type="hidden" value="{{ module.key().name() }}" name="module_key">
-                    <input class="button is-link is-small is-outlined is-rounded" type="submit" value="Guardar"/>
+    <div class="is-flex is-vcentered" style="display: flex; justify-content: center; margin-top: 50px">
+            <form action="{{ url_for('save_module') }}" method="POST">
+                <div class="columns is-vcentered">
+                    <div class="column has-text-centered">
+                        <label class="label has-text-centered">Name:</label>
+                    </div>
+                    <div class="column">
+                        <input class="input is-rounded is-hoverable" name="name" type="text" value="{{ module.name }} ">
+                        <input type="hidden" value="{{ module.key().name() }}" name="module_key">
+                    </div>
+                    <div class="column">
+                        <input class="button is-link is-fullwidth is-rounded is-outlined" type="submit" value="Guardar"/>
+                    </div>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
 </body>
 </html>

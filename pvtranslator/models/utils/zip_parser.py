@@ -70,7 +70,7 @@ def parse_zip(zip_file_storage, module_key):
         _file = z_files.open(file_name, 'rU')
 
         done, error_msg, campaign_name, campaign_date, curve_hour, curve_v_values, \
-        curve_i_values, curve_p_values = parse_xls(_file)
+            curve_i_values, curve_p_values = parse_xls(_file)
         _file.close()
 
         if done:
