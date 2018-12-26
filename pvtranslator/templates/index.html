@@ -2,18 +2,15 @@
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Vista de Módulos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.0/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-    <!-- <link rel="stylesheet" href="styles/debug.css"> -->
 </head>
 <body>
     {% block navbar %}
         {% include "navBar.html" %}
     {% endblock navbar %}
-    <div style="width: 60%; margin-left: auto; margin-right: auto;" >
+
     {% if user %}
+        <div style="margin-left: auto; margin-right: auto;">
             <form action="{{ url_for('create_module') }}" method="POST">
                 <div class="field">
                     <label class="label">Module Name</label>
@@ -23,10 +20,11 @@
                     </div>
                 </div>
             </form>
+        </div>
     {% endif %}
 
     {% block table %}
-
+    <div style="width: 60%; margin-left: auto; margin-right: auto;">
         <table class="table is-hoverable is-striped is-fullwidth" style="text-align: center;">
             <thead>
                 <tr>
@@ -55,7 +53,7 @@
                 </tr>
             {% endfor %}
         </table>
-   
+
     {% endblock table %}
     {% if errors %}
         <p>{{ errors }}</p>
