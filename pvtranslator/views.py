@@ -26,7 +26,6 @@ app._static_folder = "./static"
 #   errors -> not required
 @app.route('/', methods=['GET'])
 def index():
-    print(app.static_folder)
     errors = request.args.get('errors')
     return render_template('index.html', modules=Module.all(), user=get_user(), errors=errors)
 
