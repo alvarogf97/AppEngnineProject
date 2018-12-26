@@ -12,18 +12,17 @@
     {% block navbar %}
         {% include "navBar.html" %}
     {% endblock navbar %}
-
-    <form action="{{ url_for('save_module') }}" method="post">
-        <div class="field">
-            <label class="label">Name:</label>
-            <div class="control">
-                 <input type="text" name="name" value="{{ module.name }}"/>
-                 <input type="hidden" value="{{ module.key().name() }}" name="module_key">
-                <input class="button is-link is-small" type="submit" value="Guardar"/>
+    <div style="width: 20%; margin-left: auto; margin-right: auto;">
+        <form action="{{ url_for('save_module') }}" method="post">
+            <div class="field">
+                <label class="label">Name:</label>
+                <div class="control">
+                     <input type="text" name="name" value="{{ module.name }}"/>
+                     <input type="hidden" value="{{ module.key().name() }}" name="module_key">
+                    <input class="button is-link is-small is-outlined is-rounded" type="submit" value="Guardar"/>
+                </div>
             </div>
-        </div>
-
-
-    </form>
+        </form>
+    </div>
 </body>
 </html>
