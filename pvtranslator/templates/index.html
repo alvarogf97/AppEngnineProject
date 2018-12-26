@@ -12,51 +12,54 @@
     {% block navbar %}
         {% include "navBar.html" %}
     {% endblock navbar %}
-
+    <div style="width: 60%; margin-left: auto; margin-right: auto;" >
     {% if user %}
-        <form action="{{ url_for('create_module') }}" method="POST">
-            <div class="field">
-                <label class="label">Module Name</label>
-                <div class="control">
-                    <input name="name" type="text" >
-                    <input class="button is-link is-small" type="submit" value="Create module"/>
+            <form action="{{ url_for('create_module') }}" method="POST">
+                <div class="field">
+                    <label class="label">Module Name</label>
+                    <div class="control">
+                        <input name="name" type="text" >
+                        <input class="button is-link is-small is-rounded is-outlined" type="submit" value="Create module"/>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
     {% endif %}
 
     {% block table %}
-    <table class="table is-hoverable is-striped">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>User</th>
-                <th>Show campaigns</th>
-                <th>Delete</th>
-                <th>Edit</th>
-            </tr>
-        </thead>
 
-        {% for module in modules %}
-            <tr>
-                <td>{{module.name}}</td>
-                <td>{{module.user.email}}</td>
-                <td><button class="button is-small is-link" type="button" onclick="window.location.href='{{ url_for('index_campaigns', module_key=module.key().name()) }}'">Show campaign</button></td>
-                {% if module.has_permits(user) %}
-                    <td>
-                        <form action="{{ url_for('delete_module') }}" method="POST">
-                            <input type="hidden" name="module_key" value={{ module.key().name() }}>
-                            <input class="button is-small is-danger" type="submit" value="Delete"/>
-                        </form>
-                    </td>
-                    <td><button class="button is-small is-warning" type="button" onclick="window.location.href='{{ url_for('edit_module', module_key=module.key().name()) }}'">Edit</button>
-                {% endif %}
-            </tr>
-        {% endfor %}
-    </table>
+        <table class="table is-hoverable is-striped is-fullwidth" style="text-align: center;">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>User</th>
+                    <th>Show campaigns</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+
+            {% for module in modules %}
+                <tr>
+                    <td>{{module.name}}</td>
+                    <td>{{module.user.email}}</td>
+                    <td><button class="button is-small is-link is-rounded is-outlined" type="button" onclick="window.location.href='{{ url_for('index_campaigns', module_key=module.key().name()) }}'">Show campaign</button></td>
+                    {% if module.has_permits(user) %}
+                        <td>
+                            <form action="{{ url_for('delete_module') }}" method="POST">
+                                <input type="hidden" name="module_key" value={{ module.key().name() }}>
+                                <input class="button is-small is-danger is-rounded is-outlined" type="submit" value="Delete"/>
+                            </form>
+                        </td>
+                        <td><button class="button is-small is-warning is-rounded is-outlined" type="button" onclick="window.location.href='{{ url_for('edit_module', module_key=module.key().name()) }}'">Edit</button>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+   
     {% endblock table %}
     {% if errors %}
         <p>{{ errors }}</p>
     {% endif %}
+    </div>
 </body>
 </html>
