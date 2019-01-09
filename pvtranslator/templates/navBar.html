@@ -2,71 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bulma-0.7.2/css/bulma.css') }}" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bulma-0.7.2/css/bulma.css') }}"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <title></title>
 </head>
 <body>
 
-    <nav class="navbar is-info" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="{{ url_for('index') }}">
-          PVtranslator
-        </a>
-        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      </div>
-
-      <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-          <a class="navbar-item">
-            Home
-          </a>
-
-          <a class="navbar-item">
-            Documentation
-          </a>
-
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link">
-              More
+<nav class="navbar has-shadow is-spaced" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='images/logo35.png') }}" height="200">
             </a>
-
-            <div class="navbar-dropdown">
-              <a class="navbar-item">
-                About
-              </a>
-              <a class="navbar-item">
-                Jobs
-              </a>
-              <a class="navbar-item">
-                Contact
-              </a>
-              <hr class="navbar-divider">
-              <a class="navbar-item">
-                Report an issue
-              </a>
+            <div class="navbar-item" style="float: right;">
+                <div class="buttons">
+                    <button class="button is-primary is-outlined is-rounded"
+                            onclick="window.location.href='{{ url_for('login') }}'">
+                        <strong>Login</strong>
+                    </button>
+                    <button class="button is-warning is-outlined is-rounded"
+                            onclick="window.location.href='{{ url_for('logout') }}'">
+                        <strong>Logout</strong>
+                    </button>
+                </div>
             </div>
-          </div>
         </div>
+    </div>
 
-        <div class="navbar-end">
-          <div class="navbar-item">
-            <div class="buttons">
-                <button class="button is-primary" onclick="window.location.href='{{ url_for('login')}}'">
-                    <strong>Login</strong>
-                </button>
-                <button class="button is-light" onclick="window.location.href='{{ url_for('logout')}}'">
-                    <strong>Logout</strong>
-                </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
+</nav>
 
 </body>
 </html>
