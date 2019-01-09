@@ -4,70 +4,90 @@
     <meta charset="utf-8">
     <title>Vista de Módulos</title>
 </head>
+<script>
+    function weather() {
+        const response = fetch('https:/api.apixu.com/v1/current.json?key=03359079f1e0462c8b3185422190901&q=malaga');
+        console.log(response);
+        document.getElementById("t").innerHTML = response.json.current.temp_c
+    }
+    window.onload = weather;
+</script>
 <body>
-    {% block navbar %}
-        {% include "navBar.html" %}
-    {% endblock navbar %}
+{% block navbar %}
+    {% include "navBar.html" %}
+{% endblock navbar %}
 
-    {% if user %}
-        <div class="is-flex is-vcentered" style="display: flex; justify-content: center; margin-top: 50px">
-            <form action="{{ url_for('create_module') }}" method="POST">
-                <div class="columns is-vcentered">
-                    <div class="column has-text-centered">
-                        <label class="label">Module Name:</label>
-                    </div>
-                    <div class="column">
-                        <input class="input is-rounded is-hoverable" name="name" type="text" >
-                    </div>
-                    <div class="column">
-                        <input class="button is-link is-fullwidth is-rounded is-outlined" type="submit" value="Create module"/>
-                    </div>
+{% if user %}
+    <div class="is-flex is-vcentered" style="display: flex; justify-content: center; margin-top: 50px">
+        <form action="{{ url_for('create_module') }}" method="POST">
+            <div class="columns is-vcentered">
+                <div class="column has-text-centered">
+                    <label class="label">Module Name:</label>
                 </div>
-            </form>
-        </div>
-    {% endif %}
-
-    {% block table %}
-    <div class="is-vcentered is-flex" style="display: flex; justify-content: center; margin-top: 80px">
-        <table class="table is-hoverable is-striped is-fullwidth" style="width: 60%">
-            <thead>
-                <tr>
-                    <th class="has-text-centered">Name</th>
-                    <th class="has-text-centered">User</th>
-                    <th class="has-text-centered">Actions</th>
-                </tr>
-            </thead>
-
-            {% for module in modules %}
-                <tr>
-                    <td class="has-text-centered">{{module.name}}</td>
-                    <td class="has-text-centered">{{module.user.email}}</td>
-                    <td class="has-text-centered">
-                        <div class="columns">
-                            <div class="column">
-                                <button class="button is-fullwidth is-link is-rounded is-outlined" type="button" onclick="window.location.href='{{ url_for('index_campaigns', module_key=module.key().name()) }}'">Show campaigns</button>
-                            </div>
-                            {% if module.has_permits(user) %}
-                                <div class="column">
-                                    <form action="{{ url_for('delete_module') }}" method="POST">
-                                        <input type="hidden" name="module_key" value={{ module.key().name() }}>
-                                        <input class="button is-fullwidth is-danger is-rounded is-outlined" type="submit" value="Delete"/>
-                                    </form>
-                                </div>
-                                <div class="column">
-                                    <button class="button is-fullwidth is-warning is-rounded is-outlined" type="button" onclick="window.location.href='{{ url_for('edit_module', module_key=module.key().name()) }}'">Edit</button>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-
-    {% endblock table %}
-    {% if errors %}
-        <p>{{ errors }}</p>
-    {% endif %}
+                <div class="column">
+                    <input class="input is-rounded is-hoverable" name="name" type="text">
+                </div>
+                <div class="column">
+                    <input class="button is-link is-fullwidth is-rounded is-outlined" type="submit"
+                           value="Create module"/>
+                </div>
+            </div>
+        </form>
     </div>
+{% endif %}
+
+{% block table %}
+    <div class="is-vcentered is-flex" style="display: flex; justify-content: center; margin-top: 80px">
+    <table class="table is-hoverable is-striped is-fullwidth" style="width: 60%">
+        <thead>
+        <tr>
+            <th class="has-text-centered">Name</th>
+            <th class="has-text-centered">User</th>
+            <th class="has-text-centered">Actions</th>
+        </tr>
+        </thead>
+
+        {% for module in modules %}
+            <tr>
+                <td class="has-text-centered">{{ module.name }}</td>
+                <td class="has-text-centered">{{ module.user.email }}</td>
+                <td class="has-text-centered">
+                    <div class="columns">
+                        <div class="column">
+                            <button class="button is-fullwidth is-link is-rounded is-outlined" type="button"
+                                    onclick="window.location.href='{{ url_for('index_campaigns', module_key=module.key().name()) }}'">
+                                Show campaigns
+                            </button>
+                        </div>
+                        {% if module.has_permits(user) %}
+                            <div class="column">
+                                <form action="{{ url_for('delete_module') }}" method="POST">
+                                    <input type="hidden" name="module_key" value={{ module.key().name() }}>
+                                    <input class="button is-fullwidth is-danger is-rounded is-outlined" type="submit"
+                                           value="Delete"/>
+                                </form>
+                            </div>
+                            <div class="column">
+                                <button class="button is-fullwidth is-warning is-rounded is-outlined" type="button"
+                                        onclick="window.location.href='{{ url_for('edit_module', module_key=module.key().name()) }}'">
+                                    Edit
+                                </button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock table %}
+{% if errors %}
+    <p>{{ errors }}</p>
+{% endif %}
+</div>
+<div style="text-align: center;">
+    <p>Current weather is </p>
+    <p id="t"></p>
+</div>
 </body>
 </html>
