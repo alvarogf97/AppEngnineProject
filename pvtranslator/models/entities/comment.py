@@ -4,7 +4,7 @@ from pvtranslator.models.entities.user import User
 
 
 class Comment(db.Model):
-    text = db.StringProperty()
+    text = db.StringProperty(multiline=True)
     module = db.ReferenceProperty(Module, collection_name='comments')
     user = db.ReferenceProperty(User)
 
