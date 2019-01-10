@@ -6,13 +6,12 @@
 </head>
 <script>
     function weather() {
-        fetch('https:/api.apixu.com/v1/current.json?key=03359079f1e0462c8b3185422190901&q=malaga').then(function (res) {
+        fetch('https://api.apixu.com/v1/current.json?key=03359079f1e0462c8b3185422190901&q=malaga').then(function (res) {
             if(res.status != 200){
                 document.getElementById("t").innerHTML = 'could not connect to weather api'
             }
 
             res.json().then(function (data) {
-                console.log(data)
                 document.getElementById("weather_image").src = data.current.condition.icon;
                 document.getElementById("weather_time").innerHTML = data.current.condition.text;
                 document.getElementById("weather_temperature").innerHTML = data.current.temp_c;
@@ -100,7 +99,7 @@
 <div class="is-vcentered is-flex" style="display: flex; justify-content: center; margin-top: 80px">
     <div class="card is-fullwidth">
       <div class="card-content">
-        <p class="title">
+        <p class="title" id="t">
             Current weather:
         </p>
         <div class="media">
